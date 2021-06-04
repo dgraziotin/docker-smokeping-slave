@@ -1,0 +1,12 @@
+#!/usr/bin/with-contenv bash
+
+if [ "x$MASTER_URL" == "x" ]; then
+    echo "Please define a master URL in \$MASTER_URL env variable. Detected value: $MASTER_URL"
+fi
+if [ "x$SHARED_SECRET" == "x" ]; then
+    echo "Please define a shared secret in \$SHARED_SECRET env variable. Detected value: $SHARED_SECRET"
+fi
+
+echo $SHARED_SECRET > /config/smokeping_secrets && \
+    chmod 640 /config/smokeping_secrets
+exec s6-setuidgid abc  /usr/bin/smokeping --config="/etc/smokeping/config" --master-url="$MASTER_URL" --shared-secret=/config/smokeping_secrets  --cache-dir=/tmp --nodaemon

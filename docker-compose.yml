@@ -1,0 +1,21 @@
+---
+version: "2.1"
+services:
+  smokeping-slave:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smokeping-slave
+    hostname: smokeping-slave
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+      - SHARED_SECRET=12345password
+      - MASTER_URL=http://your.smokeping.ext/smokeping/smokeping.cgi
+    volumes:
+      - ./config:/config
+      - ./data:/data
+    ports:
+      - 80:80
+    restart: unless-stopped
